@@ -5,6 +5,7 @@ import io
 import pathlib
 import string
 import struct
+import tempfile
 from html import escape
 from typing import (
     Any,
@@ -52,7 +53,9 @@ class open_filename(object):
         if isinstance(filename, str):
             self.file_handler: AnyIO = open(filename, *args, **kwargs)
             self.closing = True
-        elif isinstance(filename, io.IOBase):
+        elif isinstance(filename, io.IOBase) or isinstance(
+            filename, tempfile._TemporaryFileWrapper
+        ):
             self.file_handler = cast(AnyIO, filename)
             self.closing = False
         else:
